@@ -1,6 +1,7 @@
 class RecordsController < ApplicationController
   def index
     # 既存のkaminari
+    @records = Record.page(params[:page]).per(10)
   end
 
   def search
