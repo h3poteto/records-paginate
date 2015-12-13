@@ -6,7 +6,17 @@ class RecordsController < ApplicationController
 
   def search
     # 新しいやり方を考える
-    @guess_paging = GuessPaging.new(Record.where(category_id: 0), '/search/count/category_id:0')
+    # TODO: このオブジェクトを全部ARオブジェクトに載せられればいいのかなぁ
+    # helperでARオブジェクトからそれらを取り出せたら最高
+    if params[:category_id]
+      @guess_paging = GuessPaging.new(
+        Record.where(category_id: params[:category_id].to_i),
+        request.path + '?cateogry=' + params[:category_id])
+    else
+      @guess_paging = GuessPaging.new(
+        Record,
+        request.path)
+    end
     @records = @guess_paging.suggestion(params[:page])
   end
 end

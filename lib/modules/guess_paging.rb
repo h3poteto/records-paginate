@@ -19,7 +19,7 @@ class GuessPaging
 
   def get_max_page
     max = RedisClient.get(@key).to_i
-    if max.blank?
+    if max.blank? || max.zero?
       all = @obj.count
       max = all % @per_page == 0 ? all / @per_page : (all / @per_page + 1)
       RedisClient.set(@key, max)
