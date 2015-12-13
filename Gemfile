@@ -35,6 +35,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'kaminari'
 gem 'peek'
 gem 'peek-rblineprof'
+gem 'redis'
 
 group :development, :test do
   gem 'pry-byebug'

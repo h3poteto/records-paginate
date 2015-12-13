@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 create_array = []
-(0...100000).each do |i|
+(0...1525).each do |i|
   create_array << {category_id: i % 10, title: "#{i}番目", description: "#{i}番目の説明"}
 end
 
