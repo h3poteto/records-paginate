@@ -6,7 +6,7 @@ class RecordsController < ApplicationController
 
   def search
     # 新しいやり方を考える
-    @guess_paging = GuessPaging.new(Record, '/search/count')
+    @guess_paging = GuessPaging.new(Record.where(category_id: 0), '/search/count/category_id:0')
     @records = @guess_paging.suggestion(params[:page])
   end
 end
