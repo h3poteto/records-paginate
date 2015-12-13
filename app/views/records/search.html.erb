@@ -1,5 +1,6 @@
 <h1>Listing Records</h1>
 
+全部で：<%= @guess_paging.count %>件
 <table>
   <thead>
     <tr>
@@ -23,5 +24,5 @@
 </table>
 
 初期ページ：<%= link_to "1", search_records_path(page: 1) %>
-現在のページ：<%= @current_page %>
-最終ページ：<%= link_to @page_count, search_records_path(page: @page_count) %>
+現在のページ：<%= @guess_paging.current_page %>
+最終ページ：<%= link_to @guess_paging.max_page, search_records_path(page: @guess_paging.max_page) %>
