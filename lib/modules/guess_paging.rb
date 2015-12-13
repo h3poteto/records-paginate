@@ -33,7 +33,7 @@ class GuessPaging
     last_page ||= max
   end
 
-  def suggestion(page_params)
+  def guess(page_params)
     if page(page_params).length < @per_page
       last_page = @obj.count / @per_page + 1
       RedisClient.set(@key, last_page) if last_page != get_max_page

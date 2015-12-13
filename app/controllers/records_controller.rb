@@ -17,6 +17,6 @@ class RecordsController < ApplicationController
         Record,
         request.path)
     end
-    @records = @guess_paging.suggestion(params[:page])
+    @records = @guess_paging.guess(params[:page])
   end
 end
