@@ -1,16 +1,15 @@
-class GuessPaging
+module GuessPaging
+  extend ActiveSupport::Concern
   attr_reader :records, :current_page, :max_page, :count
-  class << self
-    def config(essential: , per_page: )
-      @@essential = essential
-      @@per_page = per_page
-    end
+
+  def self.included(base)
+    base.helper_method :max_page, :current_page, :count
   end
 
-  def initialize(obj, key, per_page=nil)
-    @obj = obj
-    @key = key
-    @per_page = per_page ? per_page : @@per_page
+
+  def self.config(essential: 10, per_page: 3)
+    @@essential = essential
+    @@per_page = per_page
   end
 
   def page(page_params)
@@ -33,7 +32,10 @@ class GuessPaging
     last_page ||= max
   end
 
-  def guess(page_params)
+  def guess(obj, key, page_params, per_page=nil)
+    @obj = obj
+    @key = key
+    @per_page = per_page ? per_page : @@per_page
     if page(page_params).length < @per_page
       last_page = @obj.count / @per_page + 1
       RedisClient.set(@key, last_page) if last_page != get_max_page
@@ -52,4 +54,5 @@ class GuessPaging
   def get_page(page_params)
     page_params ? page_params.to_i : 1
   end
+
 end

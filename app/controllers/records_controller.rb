@@ -1,4 +1,5 @@
 class RecordsController < ApplicationController
+  include GuessPaging
   def index
     # 既存のkaminari
     @records = Record.page(params[:page]).per(10)
@@ -9,14 +10,17 @@ class RecordsController < ApplicationController
     # TODO: このオブジェクトを全部ARオブジェクトに載せられればいいのかなぁ
     # helperでARオブジェクトからそれらを取り出せたら最高
     if params[:category_id]
-      @guess_paging = GuessPaging.new(
+      @records = guess(
         Record.where(category_id: params[:category_id].to_i),
-        request.path + '?cateogry=' + params[:category_id])
+        request.path + '?cateogry=' + params[:category_id],
+        params[:page]
+      )
     else
-      @guess_paging = GuessPaging.new(
+      @records = guess(
         Record,
-        request.path)
+        request.path,
+        params[:page]
+      )
     end
-    @records = @guess_paging.guess(params[:page])
   end
 end
