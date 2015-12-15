@@ -11,7 +11,7 @@ class GuessPaging
 
   def initialize(query: nil, per_page: nil)
     @query = query
-    @key = Digest::MD5.hexdigest(query)
+    @key = Digest::MD5.hexdigest(query.all.to_sql.to_s)
     @per_page = per_page ? per_page : @@per_page
   end
 
