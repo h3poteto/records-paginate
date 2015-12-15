@@ -1,25 +1,50 @@
-module GuessPaging
+class GuessPaging
   extend ActiveSupport::Concern
-  attr_reader :records, :current_page, :max_page, :count
+  attr_reader :current_page, :max_page, :count, :query, :records
 
-  def self.included(base)
-    base.helper_method :max_page, :current_page, :count
+  class << self
+    def config(essential: 10, per_page: 3)
+      @@essential = essential
+      @@per_page = per_page
+    end
   end
 
+  def initialize(query: nil, per_page: nil)
+    @query = query
+    @key = Digest::MD5.hexdigest(query)
+    @per_page = per_page ? per_page : @@per_page
+  end
 
-  def self.config(essential: 10, per_page: 3)
-    @@essential = essential
-    @@per_page = per_page
+  def guess(page_params: nil)
+    get_max_page
+    if page(page_params).length < @per_page
+      last_page = @query.count / @per_page + 1
+      RedisClient.set(@key, last_page) if last_page != get_max_page
+      @records = @query.limit(@per_page).offset(@per_page * (last_page - 1))
+      @current_page = last_page
+      @max_page = last_page
+      @count = @query.count
+    else
+      @current_page = get_page(page_params)
+      @max_page = get_max_page
+      @count = @max_page * @per_page
+    end
+  end
+
+  private
+
+  def get_page(page_params)
+    page_params ? page_params.to_i : 1
   end
 
   def page(page_params)
-    @records = @obj.limit(@per_page).offset(@per_page * (get_page(page_params) - 1))
+    @records = @query.limit(@per_page).offset(@per_page * (get_page(page_params) - 1))
   end
 
   def get_max_page
     max = RedisClient.get(@key).to_i
     if max.blank? || max.zero?
-      all = @obj.count
+      all = @query.count
       max = all % @per_page == 0 ? all / @per_page : (all / @per_page + 1)
       RedisClient.set(@key, max)
     end
@@ -31,28 +56,4 @@ module GuessPaging
     end
     last_page ||= max
   end
-
-  def guess(obj, key, page_params, per_page=nil)
-    @obj = obj
-    @key = key
-    @per_page = per_page ? per_page : @@per_page
-    if page(page_params).length < @per_page
-      last_page = @obj.count / @per_page + 1
-      RedisClient.set(@key, last_page) if last_page != get_max_page
-      @records = @obj.limit(@per_page).offset(@per_page * (last_page - 1))
-      @current_page = last_page
-      @max_page = last_page
-      @count = @obj.count
-    else
-      @current_page = get_page(page_params)
-      @max_page = get_max_page
-      @count = @max_page * @per_page
-    end
-    @records
-  end
-
-  def get_page(page_params)
-    page_params ? page_params.to_i : 1
-  end
-
 end

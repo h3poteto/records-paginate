@@ -1,6 +1,6 @@
 <h1>Listing Records</h1>
 
-全部で：<%= count %>件
+全部で：<%= @guess.count %>件
 <table>
   <thead>
     <tr>
@@ -12,7 +12,7 @@
     <tr>
   </thead>
   <tbody>
-    <% @records.each do |r| %>
+    <% @guess.records.each do |r| %>
       <tr>
         <td><%= r.id %></td>
         <td><%= r.category_id %></td>
@@ -24,5 +24,5 @@
 </table>
 
 初期ページ：<%= link_to "1", search_records_path(page: 1) %>
-現在のページ：<%= current_page %>
-最終ページ：<%= link_to max_page, search_records_path(page: max_page) %>
+現在のページ：<%= @guess.current_page %>
+最終ページ：<%= link_to @guess.max_page, search_records_path(page: @guess.max_page) %>
