@@ -1,9 +1,10 @@
 class GuessPaging
   extend ActiveSupport::Concern
   attr_reader :current_page, :max_page, :count, :query, :records
-
+  @@essential = 3
+  @@per_page = 10
   class << self
-    def config(essential: 10, per_page: 3)
+    def config(essential: 3, per_page: 10)
       @@essential = essential
       @@per_page = per_page
     end
