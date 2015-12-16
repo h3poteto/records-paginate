@@ -3,7 +3,7 @@ module ApplicationHelper
     hash = request.params
     hash.delete(:controller)
     hash.delete(:action)
-    div = content_tag(:div, class: 'paging') do
+    div = content_tag(:div, class: 'guess-paging') do
       content_tag(:ul) do
         if guess.current_page < 5
           # 先頭
