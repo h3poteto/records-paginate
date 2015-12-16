@@ -1,19 +1,12 @@
 class GuessPaging
   extend ActiveSupport::Concern
   attr_reader :current_page, :max_page, :count, :query, :records
-  @@essential = 3
-  @@per_page = 10
-  class << self
-    def config(essential: 3, per_page: 10)
-      @@essential = essential
-      @@per_page = per_page
-    end
-  end
 
-  def initialize(query: nil, per_page: nil)
+  def initialize(query: nil, per_page: 10, essential: 3)
     @query = query
     @key = Digest::MD5.hexdigest(query.all.to_sql.to_s)
-    @per_page = per_page ? per_page : @@per_page
+    @per_page = per_page
+    @essential = essential
   end
 
   def guess(page_params: nil)
@@ -51,9 +44,9 @@ class GuessPaging
     end
 
     count_digit = max.to_s.length
-    if count_digit > @@essential
-      i = max.to_f / (10 ** (count_digit - @@essential))
-      last_page = (i.ceil * 10 ** (count_digit - @@essential)).to_i
+    if count_digit > @essential
+      i = max.to_f / (10 ** (count_digit - @essential))
+      last_page = (i.ceil * 10 ** (count_digit - @essential)).to_i
     end
     last_page ||= max
   end
