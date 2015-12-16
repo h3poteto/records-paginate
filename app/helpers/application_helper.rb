@@ -1,21 +1,21 @@
 module ApplicationHelper
-  def paging(guess)
-    hash = request.params
-    hash.delete(:controller)
-    hash.delete(:action)
-    div = content_tag(:div, class: 'guess-paging') do
-      content_tag(:ul) do
-        if guess.current_page < 5
-          first_paging(guess, hash)
-        elsif guess.current_page > guess.max_page - 4
-          last_paging(guess, hash)
-        else
-          middle_paging(guess, hash)
-        end
-      end
-    end
-    div.html_safe
-  end
+  # def paging(guess)
+  #   hash = request.params
+  #   hash.delete(:controller)
+  #   hash.delete(:action)
+  #   div = content_tag(:div, class: 'guess-paging') do
+  #     content_tag(:ul) do
+  #       if guess.current_page < 5
+  #         first_paging(guess, hash)
+  #       elsif guess.current_page > guess.max_page - 4
+  #         last_paging(guess, hash)
+  #       else
+  #         middle_paging(guess, hash)
+  #       end
+  #     end
+  #   end
+  #   div.html_safe
+  # end
 
   def first_paging(guess, hash)
     li = ""

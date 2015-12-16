@@ -11,5 +11,6 @@
  * file per style scope.
  *
  *= require_tree .
+ *= require guess_paging
  *= require_self
  */

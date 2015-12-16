@@ -9,14 +9,14 @@ class RecordsController < ApplicationController
     # TODO: このオブジェクトを全部ARオブジェクトに載せられればいいのかなぁ
     # helperでARオブジェクトからそれらを取り出せたら最高
     if params[:category_id]
-      @guess = GuessPaging.new(
+      @guess = GuessPaging::Paginate.new(
         query: Record.where(category_id: params[:category_id].to_i),
         per_page: 10)
       @guess.guess(
         page_params: params[:page]
       )
     else
-      @guess = GuessPaging.new(
+      @guess = GuessPaging::Paginate.new(
         query: Record,
         per_page: 10)
       @guess.guess(

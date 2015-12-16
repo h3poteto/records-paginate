@@ -36,6 +36,7 @@ gem 'kaminari'
 gem 'peek'
 gem 'peek-rblineprof'
 gem 'redis'
+gem 'guess_paging', path: "../guess_paging"
 
 group :development, :test do
   gem 'pry-byebug'
