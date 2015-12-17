@@ -2,6 +2,7 @@ PATH
   remote: ../guess_paging
   specs:
     guess_paging (0.1.0)
+      redis (~> 3.2)
 
 GEM
   remote: https://rubygems.org/
